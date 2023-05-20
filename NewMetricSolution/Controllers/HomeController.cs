@@ -14,14 +14,16 @@ namespace NewMetricSolution.Controllers
         private readonly IEmployeesBase _context;
         private readonly IMapper _mapper;
         private ComplexObjectDTO _complexObject;
+        private ApiResponse _response;
 
 
-        public HomeController(IMapper mapper, IEmployeesBase context)
+        public HomeController(IMapper mapper, IEmployeesBase context, ApiResponse response)
         {
             _mapper = mapper;
             _context = context;
             var entityObj = _context.CreateComplexObjectForView();
             _complexObject = _mapper.Map<ComplexObjectDTO>(entityObj);
+            _response = response;
         }
 
         public IActionResult Index()
