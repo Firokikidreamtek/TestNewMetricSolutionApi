@@ -1,23 +1,23 @@
 using Mapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NewMetricSolution.DB;
 using NewMetricSolution.DB.DBContexts;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddScoped<IEmployeesBase, EmployeesBase>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
                        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<IEmployeesBase, EmployeesBase>();
 
 
-builder.Services.AddCors();
 
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
 
 
 var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
@@ -38,8 +38,21 @@ builder.Services.AddAuthentication(u =>
     };
 });
 
+builder.Services.AddCors();
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
+    options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Description =
+            "JWT Authorization header using the Bearer scheme. \r\n\r\n " +
+            "Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\n" +
+            "Example: \"Bearer 12345abcdef\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Scheme = JwtBearerDefaults.AuthenticationScheme
+    });
     options.AddSecurityRequirement(new OpenApiSecurityRequirement()
     {
         {
@@ -77,14 +90,10 @@ else
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
+app.UseCors(o => o.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().WithExposedHeaders("*"));
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllers();
 
 app.Run();

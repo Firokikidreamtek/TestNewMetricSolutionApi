@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace RedMango_API.Models
+namespace Domains.DTO
 {
     public class ApiResponse
     {
