@@ -24,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mapper\Mapper.csproj" />
     <ProjectReference Include="..\NewMetricSolution.DB\NewMetricSolution.DB.csproj" />
   </ItemGroup>
 

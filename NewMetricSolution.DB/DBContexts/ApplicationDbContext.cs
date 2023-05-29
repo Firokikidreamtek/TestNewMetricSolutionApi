@@ -14,7 +14,6 @@ namespace NewMetricSolution.DB.DBContexts
         {
             Database.EnsureCreated();
         }
-        public DbSet<ComplexObject> ComplexObject { get; set; }
 
         public DbSet<CustomerServiceDepartment> CustomerServiceDepartment { get; set; }
 
@@ -35,11 +34,8 @@ namespace NewMetricSolution.DB.DBContexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            #region ComplexObject
-            var complexObject = new ComplexObject { Id = 1 };
-            modelBuilder.Entity<ComplexObject>().HasData(complexObject);
             #region Customer
-            var customer = new CustomerServiceDepartment { Id = 1, Employees = 11, ComplexObjectId = complexObject.Id };
+            var customer = new CustomerServiceDepartment { Id = 1, Employees = 11};
             modelBuilder.Entity<CustomerServiceDepartment>().HasData(customer);
             #region Sales
             var allSales = new SalesDepartment { Id = 1, Employees = 4, CustomerServiceDepartmentId = customer.Id };
@@ -62,7 +58,7 @@ namespace NewMetricSolution.DB.DBContexts
             #endregion
 
             #region Production
-            var production = new ProductionDepartment { Id = 1, Employees = 7, ComplexObjectId = complexObject.Id };
+            var production = new ProductionDepartment { Id = 1, Employees = 7};
             var engineering = new EngineeringDepartment() { Id = 1, Employees = 4, ProductionDepartmentId = production.Id };
             var qualityControl = new QualityControlDepartment() { Id = 1, Employees = 2, ProductionDepartmentId = production.Id };
             var purchasing = new PurchasingDepartment() { Id = 1, Employees = 1, ProductionDepartmentId = production.Id };
@@ -73,10 +69,8 @@ namespace NewMetricSolution.DB.DBContexts
             #endregion
 
             #region Accounting
-            var accounting = new AccountingDepartment { Id = 1, Employees = 2, ComplexObjectId = complexObject.Id };
+            var accounting = new AccountingDepartment { Id = 1, Employees = 2};
             modelBuilder.Entity<AccountingDepartment>().HasData(accounting);
-            #endregion
-
             #endregion
         }
 

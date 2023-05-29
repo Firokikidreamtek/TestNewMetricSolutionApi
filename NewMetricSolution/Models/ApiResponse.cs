@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Domains.DTO
+namespace NewMetricSolution.Models
 {
     public class ApiResponse
     {
@@ -13,4 +13,5 @@ namespace Domains.DTO
         public List<string> ErrorMessages { get; set; }
         public object Result { get; set; }
     }
+
 }
